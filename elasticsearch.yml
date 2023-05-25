@@ -1,6 +1,6 @@
 ---
 - name: Configure Elasticsearch Server
-  hosts: your_host
+  hosts: vmw-frclnp01
   become: true
   tasks:
     - name: Import Elasticsearch GPG key
@@ -39,7 +39,7 @@
     - name: Allow remote access to Elasticsearch
       ufw:
         rule: allow
-        from_ip: 198.51.100.0
+        from_ip: 192.168.1.52
         to_port: 9200
         proto: tcp
 
