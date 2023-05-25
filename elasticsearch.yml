@@ -36,24 +36,6 @@
         state: started
         enabled: yes
 
-    - name: Allow remote access to Elasticsearch
-      ufw:
-        rule: allow
-        from_ip: 192.168.1.52
-        to_port: 9200
-        proto: tcp
-
-    - name: Enable UFW firewall
-      ufw:
-        state: enabled
-
-    - name: Check UFW status
-      command: ufw status
-      register: ufw_status
-
-    - debug:
-        var: ufw_status.stdout_lines
-
     - name: Test Elasticsearch
       uri:
         url: http://localhost:9200
