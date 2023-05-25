@@ -9,7 +9,7 @@
         state: directory
         mode: "0755"
         owner: ansadmuser
-        group: ansadmuser
+        group: root
       become: true
       become_user: root
 
