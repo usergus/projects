@@ -1,0 +1,65 @@
+---
+- name: Configure Elasticsearch Server
+  hosts: your_host
+  become: true
+  tasks:
+    - name: Import Elasticsearch GPG key
+      apt_key:
+        url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+        state: present
+
+    - name: Add Elastic package source
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/elastic.gpg] https://artifacts.elastic.co/packages/7.x/apt stable main"
+        state: present
+        filename: elastic-7.x.list
+
+    - name: Update package lists
+      apt:
+        update_cache: yes
+
+    - name: Install Elasticsearch
+      apt:
+        name: elasticsearch
+        state: present
+
+    - name: Configure Elasticsearch
+      lineinfile:
+        path: /etc/elasticsearch/elasticsearch.yml
+        regexp: '^#?network.host:'
+        line: 'network.host: localhost'
+        validate: 'elasticsearch -f --configtest'
+
+    - name: Start Elasticsearch service
+      service:
+        name: elasticsearch
+        state: started
+        enabled: yes
+
+    - name: Allow remote access to Elasticsearch
+      ufw:
+        rule: allow
+        from_ip: 198.51.100.0
+        to_port: 9200
+        proto: tcp
+
+    - name: Enable UFW firewall
+      ufw:
+        state: enabled
+
+    - name: Check UFW status
+      command: ufw status
+      register: ufw_status
+
+    - debug:
+        var: ufw_status.stdout_lines
+
+    - name: Test Elasticsearch
+      uri:
+        url: http://localhost:9200
+        method: GET
+        return_content: yes
+      register: elasticsearch_response
+
+    - debug:
+        var: elasticsearch_response.content
