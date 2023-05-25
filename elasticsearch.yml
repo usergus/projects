@@ -3,6 +3,14 @@
   hosts: vmw-frclnp01
   gather_facts: false
   tasks:
+    - name: Create ansadmuser home directory
+      file:
+        path: "/home/ansadmuser"
+        state: directory
+        mode: "0755"
+        owner: ansadmuser
+        group: ansadmuser
+
     - name: Add test text file
       lineinfile:
         line: "test"
