@@ -10,6 +10,8 @@
         mode: "0755"
         owner: ansadmuser
         group: ansadmuser
+      become: true
+      become_user: root
 
     - name: Add test text file
       lineinfile:
