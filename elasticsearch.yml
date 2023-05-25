@@ -1,11 +1,12 @@
 ---
 - name: Configure Elasticsearch Server
-  command: some_command
-  hosts: vmw-frclnp01
-  become_method: sudo
-  vars:
-    ansible_become_password: "janvier"
+  hosts: your_host
   become: true
+  tasks:
+    - name: Import Elasticsearch GPG key
+      apt_key:
+        url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+        state: present
   tasks:
     - name: Import Elasticsearch GPG key
       apt_key:
