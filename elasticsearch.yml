@@ -1,12 +1,7 @@
 ---
 - name: Configure Elasticsearch Server
-  hosts: your_host
+  hosts: localhost
   become: true
-  tasks:
-    - name: Import Elasticsearch GPG key
-      apt_key:
-        url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-        state: present
   tasks:
     - name: Import Elasticsearch GPG key
       apt_key:
