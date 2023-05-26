@@ -13,7 +13,7 @@
 
   - name: "create www directory"
     file:
-      path: /var/www/{{ domain }}
+      path: /var/www/maleo.com
       state: directory
       mode: '0775'
       owner: "{{ ansible_user }}"
@@ -33,6 +33,12 @@
       group: root
       mode: '0644'
     notify: restart nginx
+
+  - name: Add entry to /etc/hosts
+    become: yes
+    ansible.builtin.lineinfile:
+      path: /etc/hosts
+      line: '127.0.0.1       maleo.com'
 
   handlers:
     - name: restart nginx
