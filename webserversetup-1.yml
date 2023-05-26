@@ -1,14 +1,41 @@
-- hosts: vmw-frclnp01
-  sudo: yes
+- hosts: web
+  become: yes
   tasks:
-    - name: install apache2
-      apt: name=apache2 update_cache=yes state=latest
+  - name: "apt-get update"
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
 
-    - name: enabled mod_rewrite
-      apache2_module: name=rewrite state=present
-      notify:
-        - restart apache2
+  - name: "install nginx"
+    apt:
+      name: ['nginx']
+      state: latest
+
+  - name: "create www directory"
+    file:
+      path: /var/www/{{ domain }}
+      state: directory
+      mode: '0775'
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+
+  - name: delete default nginx site
+    file:
+      path: /etc/nginx/sites-enabled/default
+      state: absent
+    notify: restart nginx
+
+  - name: copy nginx site.conf
+    template:
+      src: site.conf.j2
+      dest: /etc/nginx/sites-enabled/{{ domain }}
+      owner: root
+      group: root
+      mode: '0644'
+    notify: restart nginx
 
   handlers:
-    - name: restart apache2
-      service: name=apache2 state=restarted
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
