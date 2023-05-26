@@ -1,4 +1,4 @@
-- hosts: Ubuntu Servers
+- hosts: "Ubuntu Servers"
   become: yes
   tasks:
   - name: "apt-get update"
