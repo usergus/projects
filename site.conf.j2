@@ -8,9 +8,9 @@ server {
         try_files $uri $uri/ =404;
     }
 
-    location /photos {
-        alias /var/www/maleo.com/photos;
-        autoindex on;
+    location ~* \.(gif|jpg|jpeg|png)$ {
+        root /var/www/maleo.com/photos;
+        expires 10d;
     }
 }
 
