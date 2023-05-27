@@ -1,9 +1,16 @@
 server {
-  listen 80;
-  listen [::]:80;
-  server_name maleo.com;
-  root /var/www/maleo.com;
-  location / {
-    try_files $uri $uri/ =404;
-  }
+    listen 80;
+    listen [::]:80;
+    server_name maleo.com;
+    root /var/www/maleo.com;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location ~* \.(gif|jpg|jpeg|png)$ {
+        root /var/www/maleo.com/photos;
+        expires 10d;
+    }
 }
+
