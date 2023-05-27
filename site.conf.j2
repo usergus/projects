@@ -3,7 +3,7 @@ server {
   listen [::]:80;
   server_name maleo.com;
   root /var/www/maleo.com;
-  location / {
-    try_files $uri $uri/ =404;
-  }
+  location /photos {
+        try_files $uri $uri/ =404;
+    }
 }
