@@ -1,44 +1,44 @@
 - hosts: vmw-frclnp01
   become: yes
   tasks:
-  - name: "apt-get update"
-    apt:
-      update_cache: yes
-      cache_valid_time: 3600
+    - name: "apt-get update"
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
 
-  - name: "install nginx"
-    apt:
-      name: ['nginx']
-      state: latest
+    - name: "install nginx"
+      apt:
+        name: ['nginx']
+        state: latest
 
-  - name: "create www directory"
-    file:
-      path: /var/www/maleo.com
-      state: directory
-      mode: '0775'
-      owner: "ansadmuser"
-      group: "ansadmgrp"
+    - name: "create www directory"
+      file:
+        path: /var/www/maleo.com
+        state: directory
+        mode: '0775'
+        owner: "ansadmuser"
+        group: "ansadmgrp"
 
-  - name: delete default nginx site
-    file:
-      path: /etc/nginx/sites-enabled/default
-      state: absent
-    notify: restart nginx
+    - name: delete default nginx site
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: restart nginx
 
-  - name: copy nginx site.conf
-    template:
-      src: site.conf.j2
-      dest: /etc/nginx/sites-enabled/maleo.com
-      owner: root
-      group: root
-      mode: '0644'
-    notify: restart nginx
+    - name: copy nginx site.conf
+      template:
+        src: site.conf.j2
+        dest: /etc/nginx/sites-enabled/maleo.com
+        owner: root
+        group: root
+        mode: '0644'
+      notify: restart nginx
 
-  - name: Add entry to /etc/hosts
-    become: yes
-    ansible.builtin.lineinfile:
-      path: /etc/hosts
-      line: '127.0.0.1       maleo.com'
+    - name: Add entry to /etc/hosts
+      become: yes
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        line: '127.0.0.1       maleo.com'
 
   handlers:
     - name: restart nginx
@@ -46,13 +46,13 @@
         name: nginx
         state: restarted
 
-  - name: Clone GitHub repository and copy contents
-  git:
-    repo: https://github.com/usergus/projects.git
-    version: 0a173ff8645c689171d5d8987cf283c2b5b457ac
-    dest: /tmp/maleo_repo
-    force: yes
-    clone: yes
+    - name: Clone GitHub repository and copy contents
+      git:
+        repo: https://github.com/usergus/projects.git
+        version: 0a173ff8645c689171d5d8987cf283c2b5b457ac
+        dest: /tmp/maleo_repo
+        force: yes
+        clone: yes
 
-  - name: Copy repository contents to /var/www/maleo.com
-  shell: cp -r /tmp/maleo_repo/maleo.com/* /var/www/maleo.com/
+    - name: Copy repository contents to /var/www/maleo.com
+      shell: cp -r /tmp/maleo_repo/maleo.com/* /var/www/maleo.com/
