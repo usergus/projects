@@ -43,7 +43,6 @@
     - name: Clone GitHub repository and copy contents
       git:
         repo: https://github.com/usergus/projects.git
-        version: 0a173ff8645c689171d5d8987cf283c2b5b457ac
         dest: /tmp/maleo_repo
         force: yes
         clone: yes
