@@ -40,12 +40,6 @@
         path: /etc/hosts
         line: '127.0.0.1       maleo.com'
 
-  handlers:
-    - name: restart nginx
-      service:
-        name: nginx
-        state: restarted
-
     - name: Clone GitHub repository and copy contents
       git:
         repo: https://github.com/usergus/projects.git
@@ -56,3 +50,9 @@
 
     - name: Copy repository contents to /var/www/maleo.com
       shell: cp -r /tmp/maleo_repo/maleo.com/* /var/www/maleo.com/
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
